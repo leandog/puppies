@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '4.2.7.1'
 
 gem 'json_pure'
 gem 'spruz'
@@ -12,23 +12,26 @@ gem 'ffi'
 gem 'will_paginate'
 gem 'jquery-rails'
 
-group :assets do
-  gem 'sass-rails'
-  gem 'coffee-rails'
-  gem 'uglifier'
-end
+gem 'sass-rails'
+gem 'coffee-rails'
+gem 'uglifier'
 
 group :development, :test do
+  gem 'therubyracer', platforms: :ruby
+  gem 'rspec', '~> 3.5'
   gem 'rspec-rails'
-  gem 'sqlite3-ruby', :require => 'sqlite3'
+  gem 'rspec-activemodel-mocks'
+  gem 'factory_girl'
+  gem 'factory_girl_rails'
+  gem 'page-object'
+  gem 'cucumber'
+  gem 'cucumber-rails', :require => false
+  gem 'sqlite3'
+  gem 'database_cleaner'
 end
+
 group :production do
   gem 'pg'
 end
 
-group :test do
-  gem 'page-object'
-  gem 'rspec'
-  gem 'cucumber'
-end
 

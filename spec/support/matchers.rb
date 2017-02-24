@@ -2,7 +2,7 @@ RSpec::Matchers.define :have_errors_on do |attribute|
   chain :with_message do |message|
     @message = message
   end
-  
+
   match do |model|
     model.valid?
 
@@ -15,7 +15,7 @@ RSpec::Matchers.define :have_errors_on do |attribute|
     end
   end
 
-  failure_message_for_should do |model|
+  failure_message do |model|
     if @message
       "Validation errors #{model.errors[attribute].inspect} should include #{@message.inspect}"
     else
@@ -23,7 +23,7 @@ RSpec::Matchers.define :have_errors_on do |attribute|
     end
   end
 
-  failure_message_for_should_not do |model|
+  failure_message_when_negated do |model|
     "#{model.class} should not have an error on attribute #{attribute.inspect}"
   end
 end

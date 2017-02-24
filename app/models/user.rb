@@ -1,9 +1,10 @@
 class User < ActiveRecord::Base
   after_destroy :ensure_an_admin_remains
-  
+
   validates :name, :presence => true, :uniqueness => true
-  
-  validates :password, :confirmation => true
+
+  validates :password, confirmation: true
+  validates :password, length: { minimum: 2 }
   attr_accessor :password_confirmation
   attr_reader :password
 

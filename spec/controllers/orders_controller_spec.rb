@@ -1,14 +1,18 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe OrdersController do
+RSpec.describe OrdersController, type: :controller do
   before(:each) do
     OrdersController.skip_before_filter :authorize
   end
-  
+
+  def mock_puppy(stubs={})
+    @puppy ||= mock_model(Puppy, stubs).as_null_object
+  end
+
   def mock_order(stubs={})
     @order ||= mock_model(Order, stubs).as_null_object
   end
-  
+
   def mock_cart(stubs={})
     @cart ||= mock_model(Cart, stubs).as_null_object
   end
@@ -16,72 +20,82 @@ describe OrdersController do
   def mock_adoption(stubs={})
     @mock_adoption ||= mock_model(Adoption, stubs).as_null_object
   end
-  
+
+  let(:valid_attributes) {
+    {name: "Joe Sixpack", address: "123 Main St.", email: "joe@sixpack.com", pay_type: "Check"}
+  }
+
+  let(:invalid_attributes) {
+    {name: nil}
+  }
+
+  let(:valid_session) { {} }
+
   describe "GET index" do
     it "assigns all orders as @orders" do
-      Order.stub(:paginate) { mock_order }
+      allow(Order).to receive(:paginate).and_return(mock_order)
       get :index
-      assigns(:orders).should == mock_order
+      expect(assigns(:orders)).to be(mock_order)
     end
   end
-  
+
   describe "GET show" do
     it "assigns the requested order as @order" do
-      Order.stub(:find).with("37") { mock_order }
-      get :show, :id => "37"
-      assigns(:order).should be(mock_order)
+      allow(Order).to receive(:find).with("37").and_return(mock_order)
+      get :show, id: "37"
+      expect(assigns(:order)).to be(mock_order)
     end
   end
 
   describe "GET new" do
     it "assigns a new order as @order" do
-      Cart.stub!(:find) { mock_cart(:adoptions => [mock_adoption]) }
-      Order.stub(:new) { mock_order }
+      allow(Cart).to receive(:find).and_return(mock_cart(adoptions: [mock_adoption]))
+      allow(Order).to receive(:new).and_return(mock_order)
       get :new
-      assigns(:order).should be(mock_order)
+      expect(assigns(:order)).to be(mock_order)
     end
 
     it "redirects to agency page when not adoptions present" do
-      Cart.stub!(:find) { mock_cart(:adoptions => []) }
+      allow(Cart).to receive(:find).and_return(mock_cart(adoptions: []))
       get :new
-      response.should redirect_to(agency_url)
+      expect(response).to redirect_to(agency_url)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested order as @order" do
-      Order.stub(:find).with("37") { mock_order }
-      get :edit, :id => "37"
-      assigns(:order).should be(mock_order)
+      allow(Order).to receive(:find).with("37").and_return(mock_order)
+      get :edit, id: "37"
+      expect(assigns(:order)).to be(mock_order)
     end
   end
 
   describe "POST create" do
     describe "with valid params" do
       it "assigns a newly created puppy as @puppy" do
-        Order.stub!(:new).with({'these' => 'params'}) { mock_order(:save => true) }
-        post :create, :order => {'these' => 'params'}
-        assigns(:order).should be(mock_order)
+        allow(Order).to receive(:new).with(valid_attributes).and_return(mock_order(save: true))
+        post :create, order: valid_attributes
+        expect(assigns(:order)).to be(mock_order)
       end
 
       it "redirects to the agency page" do
-        Order.stub!(:new) { mock_order(:save => true) }
-        post :create, :order => {}
-        response.should redirect_to(agency_url)
+        allow(Order).to receive(:new).and_return(mock_order(save: true))
+        post :create, order: {}
+        expect(response).to redirect_to(agency_url)
       end
     end
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved order as @order" do
-        Order.stub!(:new).with({'these' => 'params'}) { mock_order(:save => false) }
-        post :create, :order => {'these' => 'params'}
-        assigns(:order).should be(mock_order)
+        allow(Order).to receive(:new).with(invalid_attributes).and_return(mock_order(save: false))
+        post :create, order: invalid_attributes
+        expect(assigns(:order)).to be(mock_order)
       end
 
       it "re-renders the 'new' template" do
-        Order.stub!(:new) { mock_order(:save => false) }
-        post :create, :order => {}
-        response.should render_template("new")
+        allow(Order).to receive(:new).and_return(mock_order(save: false))
+        post :create, order: invalid_attributes
+        expect(response).to render_template("new")
       end
     end
   end
@@ -89,50 +103,51 @@ describe OrdersController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested order" do
-        Order.stub(:find).with("37") { mock_order }
-        mock_order.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => "37", :order => {'these' => 'params'}
+        allow(Order).to receive(:find).with("37").and_return(mock_order)
+        allow(mock_order).to receive(:update).with(valid_attributes)
+        put :update, id: "37", order: valid_attributes
+        expect(response.status).to be(200)
       end
 
       it "assigns the requested order as @order" do
-        Order.stub(:find) { mock_order(:update_attributes => true) }
-        put :update, :id => "1"
-        assigns(:order).should be(mock_order)
+        allow(Order).to receive(:find).and_return(mock_order(update: true))
+        put :update, id: "1", order: valid_attributes
+        expect(assigns(:order)).to be(mock_order)
       end
 
       it "redirects to the order" do
-        Order.stub(:find) { mock_order(:update_attributes => true) }
-        put :update, :id => "1"
-        response.should redirect_to(order_url(mock_order))
+        allow(Order).to receive(:find).and_return(mock_order(update: true))
+        put :update, id: "1", order: valid_attributes
+        expect(response).to redirect_to(order_url(mock_order))
       end
     end
 
     describe "with invalid params" do
       it "assigns the order as @order" do
-        Order.stub(:find) { mock_order(:update_attributes => false) }
-        put :update, :id => "1"
-        assigns(:order).should be(mock_order)
+        allow(Order).to receive(:find).and_return(mock_order(update: false))
+        put :update, id: "1", order: valid_attributes
+        expect(assigns(:order)).to be(mock_order)
       end
 
       it "re-renders the 'edit' template" do
-        Order.stub(:find) { mock_order(:update_attributes => false) }
-        put :update, :id => "1"
-        response.should render_template("edit")
+        allow(Order).to receive(:find).and_return(mock_order(update: false))
+        put :update, id: "1", order: valid_attributes
+        expect(response).to render_template("edit")
       end
     end
   end
 
   describe "DELETE destroy" do
     it "destroys the requested order" do
-      Order.stub(:find).with("37") { mock_order }
-      mock_order.should_receive(:destroy)
-      delete :destroy, :id => "37"
+      allow(Order).to receive(:find).with("37").and_return(mock_order)
+      allow(mock_order).to receive(:destroy)
+      delete :destroy, id: "37"
     end
 
     it "redirects to the orders page" do
-      Order.stub(:find) { mock_order }
-      delete :destroy, :id => "1"
-      response.should redirect_to(orders_url)
+      allow(Order).to receive(:find).and_return(mock_order)
+      delete :destroy, id: "1"
+      expect(response).to redirect_to(orders_url)
     end
   end
 

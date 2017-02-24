@@ -1,6 +1,6 @@
 Puppies::Application.routes.draw do
   get 'admin' => 'admin#index'
-  
+
   controller :sessions do
     get 'login' => :new
     post 'login' => :create
@@ -15,10 +15,10 @@ Puppies::Application.routes.draw do
 
   resources :carts
 
-  get "agency/index"
-
   resources :puppies
 
-  root :to => "agency#index", :as => 'agency'
+  get "agency/index"
+
+  root "agency#index", :as => 'agency'
 
 end

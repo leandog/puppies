@@ -1,30 +1,22 @@
 class OrdersController < ApplicationController
   skip_before_filter :authorize, :only => [:new, :create]
+  before_action :set_order, only: [:show, :edit, :update, :destroy]
 
   def index
-    @orders = Order.paginate :page=>params[:page], :order=>'created_at desc',
-    :per_page => 10
-
-    respond_to do |format|
-      format.html # index.html.erb
-    end
+    @orders = Order.paginate(page: params[:page], per_page: 10).order(created_at: :desc)
   end
 
   def show
-    @order = Order.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-    end
   end
 
   def new
     @cart = current_cart
+
     if current_cart.adoptions.empty?
       redirect_to agency_url, :notice => "Your cart is empty"
       return
     end
-    
+
     @order = Order.new
 
     respond_to do |format|
@@ -34,7 +26,6 @@ class OrdersController < ApplicationController
   end
 
   def edit
-    @order = Order.find(params[:id])
   end
 
   def create
@@ -49,18 +40,19 @@ class OrdersController < ApplicationController
         format.json { render :json => @order }
       else
         format.html { render :action => "new" }
+        format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def update
-    @order = Order.find(params[:id])
-
     respond_to do |format|
-      if @order.update_attributes(params[:order])
-        format.html { redirect_to(@order, :notice => 'Order was successfully updated.') }
+      if @order.update(order_params)
+        format.html { redirect_to(order_path(@order), :notice => 'Order was successfully updated.') }
+        format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :action => "edit" }
+        format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -73,6 +65,16 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(orders_url, :notice => "Please thank #{@order.name} for the order!") }
+      format.json { head :no_content }
     end
   end
+
+  private
+    def set_order
+      @order = Order.find(params[:id])
+    end
+
+    def order_params
+      params.require(:order).permit(:name, :address, :email, :pay_type)
+    end
 end

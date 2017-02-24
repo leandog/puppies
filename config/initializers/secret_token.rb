@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Puppies::Application.config.secret_token = 'c91413712a22b3f6d2630e9e7194443e17218d296b2d3a234d79d2c137649fc3c6198f87f0d1c8319b5ac009f57d87e8430f25a507b693620aa238c2b4715577'
+Puppies::Application.config.secret_key_base = '4869f9a8aa359a0a4f5af42b3b2d6dabf99f6ae949213cdd5faf3499374460684d8c915f897f501926ad3dc5cdf5b07dd7423270bbace7006e10a71fa26086bc'

@@ -1,9 +1,9 @@
 class Puppy < ActiveRecord::Base
-  default_scope :order => 'name'
+  default_scope { order('name') }
   has_many :adoptions
 
   before_destroy :ensure_not_referenced_by_any_adoption
-  
+
   validates :name, :breed, :image_url, :presence => true
   validates :fees, :numericality => {:greater_than => 0.00}
   validates :image_url, :format => {

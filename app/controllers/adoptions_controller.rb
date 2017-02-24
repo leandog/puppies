@@ -1,36 +1,23 @@
 class AdoptionsController < ApplicationController
   skip_before_filter :authorize
-  
+  before_action :set_adoption, only: [:show, :edit, :update, :destroy]
+
   # GET /adoptions
   def index
     @adoptions = Adoption.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-    end
   end
 
   # GET /adoptions/1
   def show
-    @adoption = Adoption.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-    end
   end
 
   # GET /adoptions/new
   def new
     @adoption = Adoption.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-    end
   end
 
   # GET /adoptions/1/edit
   def edit
-    @adoption = Adoption.find(params[:id])
   end
 
   # POST /adoptions
@@ -41,7 +28,7 @@ class AdoptionsController < ApplicationController
 
     respond_to do |format|
       if @adoption.save
-        format.html { redirect_to(@adoption.cart) }
+        format.html { redirect_to(cart_path(@adoption.cart)) }
         format.json { render :json => @adoption }
       else
         format.html { render :action => "new" }
@@ -51,11 +38,9 @@ class AdoptionsController < ApplicationController
 
   # PUT /adoptions/1
   def update
-    @adoption = Adoption.find(params[:id])
-
     respond_to do |format|
-      if @adoption.update_attributes(params[:adoption])
-        format.html { redirect_to(@adoption, :notice => 'Adoption was successfully updated.') }
+      if @adoption.update(adoption_params)
+        format.html { redirect_to(adoption_path(@adoption), :notice => 'Adoption was successfully updated.') }
       else
         format.html { render :action => "edit" }
       end
@@ -64,11 +49,22 @@ class AdoptionsController < ApplicationController
 
   # DELETE /adoptions/1
   def destroy
-    @adoption = Adoption.find(params[:id])
     @adoption.destroy
 
     respond_to do |format|
       format.html { redirect_to(adoptions_url) }
     end
   end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_adoption
+      @adoption = Adoption.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def adoption_params
+      params.require(:adoption).permit(:puppy_id, :cart_id)
+    end
+
 end

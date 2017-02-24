@@ -1,11 +1,17 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe AdoptionsController do
+
+RSpec.describe AdoptionsController, type: :controller do
+  render_views
+
+  before(:each) do
+    PuppiesController.skip_before_filter :authorize
+  end
 
   def mock_adoption(stubs={})
     @mock_adoption ||= mock_model(Adoption, stubs).as_null_object
   end
-  
+
   def mock_puppy(stubs={})
     @mock_puppy ||= mock_model(Puppy, stubs).as_null_object
   end
@@ -13,69 +19,79 @@ describe AdoptionsController do
   def mock_cart(stubs={})
     @cart ||= mock_model(Cart, stubs).as_null_object
   end
-  
+
+  let(:valid_attributes) {
+    {puppy_id:"1", cart_id:"1"}
+  }
+
+  let(:invalid_attributes) {
+    {:puppy_id => nil}
+  }
+
+  let(:valid_session) { {} }
+
   describe "GET index" do
     it "assigns all adoptions as @adoptions" do
-      Adoption.stub(:all) { mock_adoption }
+      allow(Adoption).to receive(:all).and_return(mock_adoption)
       get :index
-      assigns(:adoptions).should be(mock_adoption)
+      expect(assigns(:adoptions)).to be(mock_adoption)
     end
   end
-  
+
   describe "GET show" do
     it "assigns the requested adoption as @adoptions" do
-      Adoption.stub(:find).with("37") { mock_adoption }
-      get :show, :id => "37"
-      assigns(:adoption).should be(mock_adoption)
+      allow(Adoption).to receive(:find).with("37").and_return(mock_adoption)
+      get :show, id: "37"
+      expect(assigns(:adoption)).to be(mock_adoption)
     end
   end
 
   describe "GET new" do
     it "assigns a new adoption as @adoption" do
-      Adoption.stub(:new) { mock_adoption }
+      allow(Adoption).to receive(:new).and_return(mock_adoption)
       get :new
-      assigns(:adoption).should be(mock_adoption)
+      expect(assigns(:adoption)).to be(mock_adoption)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested adoption as @adoption" do
-      Adoption.stub(:find).with("37") { mock_adoption }
-      get :edit, :id => "37"
-      assigns(:adoption).should be(mock_adoption)
+      allow(Adoption).to receive(:find).with("37").and_return(mock_adoption)
+      get :edit, id: "37"
+      expect(assigns(:adoption)).to be(mock_adoption)
     end
   end
 
   describe "POST create" do
     before(:each) do
-      Puppy.stub!(:find) {mock_puppy}
+      allow(Puppy).to receive(:find).and_return(mock_puppy)
     end
-    
+
     describe "with valid params" do
       it "assigns a newly created adoption as @adoption" do
-        Cart.stub!(:find) { mock_cart(:add_puppy => mock_adoption(:save => true)) }
-        post :create, :adoption => {'these' => 'params'}
-        assigns(:adoption).should be(mock_adoption)
+        allow(Cart).to receive(:find).and_return(mock_cart(add_puppy: mock_adoption(save: true)))
+        post :create, adoption: {'these' => 'params'}
+        expect(assigns(:adoption)).to be(mock_adoption)
       end
 
-      it "redirects to the created adoption" do
-        Cart.stub!(:find) { mock_cart(:add_puppy => mock_adoption(:save => true)) }
-        post :create, :adoption => {}
-        response.should redirect_to(adoption_url(mock_adoption))
+      it "redirects to the cart with the new adoption" do
+        allow(Cart).to receive(:find).and_return(mock_cart(add_puppy: mock_adoption(save: true)))
+        post :create, adoption: {}
+        expect(response).to redirect_to(cart_path(mock_adoption))
       end
     end
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved adoption as @adoption" do
-        Cart.stub!(:find) { mock_cart(:add_puppy => mock_adoption(:save => false)) }
-        post :create, :adoption => {'these' => 'params'}
-        assigns(:adoption).should be(mock_adoption)
+        allow(Cart).to receive(:find).and_return(mock_cart(add_puppy: mock_adoption(save: false)))
+        post :create, adoption: {'these' => 'params'}
+        expect(assigns(:adoption)).to be(mock_adoption)
       end
 
       it "re-renders the 'new' template" do
-        Cart.stub!(:find) { mock_cart(:add_puppy => mock_adoption(:save => false)) }
-        post :create, :adoption => {}
-        response.should render_template("new")
+        allow(Cart).to receive(:find).and_return(mock_cart(add_puppy: mock_adoption(save: false)))
+        post :create, adoption: {}
+        expect(response).to render_template("new")
       end
     end
   end
@@ -83,50 +99,50 @@ describe AdoptionsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested adoption" do
-        Adoption.stub(:find).with("37") { mock_adoption }
-        mock_adoption.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => "37", :adoption => {'these' => 'params'}
+        allow(Adoption).to receive(:find).with("37").and_return(mock_adoption)
+        allow(mock_adoption).to receive(:update).with(valid_attributes)
+        put :update, id: "37", adoption: valid_attributes
       end
 
       it "assigns the requested adoption as @adoption" do
-        Adoption.stub(:find) { mock_adoption(:update_attributes => true) }
-        put :update, :id => "1"
-        assigns(:adoption).should be(mock_adoption)
+        allow(Adoption).to receive(:find).and_return(mock_adoption(update: true))
+        put :update, id: "1", adoption: valid_attributes
+        expect(assigns(:adoption)).to be(mock_adoption)
       end
 
       it "redirects to the adoption" do
-        Adoption.stub(:find) { mock_adoption(:update_attributes => true) }
-        put :update, :id => "1"
-        response.should redirect_to(adoption_url(mock_adoption))
+        allow(Adoption).to receive(:find).and_return(mock_adoption(update: true))
+        put :update, id: "1", adoption: valid_attributes
+        expect(response).to redirect_to(adoption_url(mock_adoption))
       end
     end
 
     describe "with invalid params" do
       it "assigns the adoption as @adoption" do
-        Adoption.stub(:find) { mock_adoption(:update_attributes => false) }
-        put :update, :id => "1"
-        assigns(:adoption).should be(mock_adoption)
+        allow(Adoption).to receive(:find).and_return(mock_adoption(update: false))
+        put :update, id: "1", adoption: invalid_attributes
+        expect(assigns(:adoption)).to be(mock_adoption)
       end
 
       it "re-renders the 'edit' template" do
-        Adoption.stub(:find) { mock_adoption(:update_attributes => false) }
-        put :update, :id => "1"
-        response.should render_template("edit")
+        allow(Adoption).to receive(:find).and_return(mock_adoption(update: false))
+        put :update, id: "1", adoption: invalid_attributes
+        expect(response).to render_template("edit")
       end
     end
   end
 
   describe "DELETE destroy" do
     it "destroys the requested adoption" do
-      Adoption.stub(:find).with("37") { mock_adoption }
-      mock_adoption.should_receive(:destroy)
-      delete :destroy, :id => "37"
+      allow(Adoption).to receive(:find).with("37").and_return(mock_adoption)
+      allow(mock_adoption).to receive(:destroy)
+      delete :destroy, id: "37"
     end
 
     it "redirects to the adoptions list" do
-      Adoption.stub(:find) { mock_adoption }
-      delete :destroy, :id => "1"
-      response.should redirect_to(adoptions_url)
+      allow(Adoption).to receive(:find).and_return(mock_adoption)
+      delete :destroy, id: "1"
+      expect(response).to redirect_to(adoptions_url)
     end
   end
 
