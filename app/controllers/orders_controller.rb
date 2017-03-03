@@ -29,7 +29,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(params[:order])
+    @order = Order.new(order_params)
     @order.add_adoptions_from_cart(current_cart)
 
     respond_to do |format|

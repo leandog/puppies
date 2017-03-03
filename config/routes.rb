@@ -8,16 +8,11 @@ Puppies::Application.routes.draw do
   end
 
   resources :users
-
   resources :orders
-
   resources :adoptions
-
   resources :carts
-
   resources :puppies
-
-  get "agency/index"
+  resources :agency, only: [:index]
 
   root "agency#index", :as => 'agency'
 
