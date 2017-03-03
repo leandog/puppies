@@ -1,5 +1,5 @@
 class AdoptionsController < ApplicationController
-  skip_before_filter :authorize
+  skip_before_action :authorize, raise: false
   before_action :set_adoption, only: [:show, :edit, :update, :destroy]
 
   # GET /adoptions

@@ -18,7 +18,7 @@ RSpec.describe CartsController, type: :controller do
   let(:valid_session) { {} }
 
   before(:each) do
-    CartsController.skip_before_filter :authorize
+    CartsController.skip_before_action :authorize, raise: false
   end
 
   describe "GET index" do
@@ -32,7 +32,7 @@ RSpec.describe CartsController, type: :controller do
   describe "GET show" do
     it "assigns the requested cart as @cart" do
       allow(Cart).to receive(:find).with("37").and_return(mock_cart)
-      get :show, id: "37"
+      get :show, params: { id: "37" }
       expect(assigns(:cart)).to be(mock_cart)
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe CartsController, type: :controller do
   describe "GET edit" do
     it "assigns the requested cart as @cart" do
       allow(Cart).to receive(:find).with("37").and_return(mock_cart)
-      get :edit, id: "37"
+      get :edit, params: { id: "37" }
       expect(assigns(:cart)).to be(mock_cart)
     end
   end
@@ -57,13 +57,13 @@ RSpec.describe CartsController, type: :controller do
     describe "with valid params" do
       it "assigns a newly created cart as @cart" do
         allow(Cart).to receive(:new).and_return(mock_cart(save: true))
-        post :create, cart: valid_attributes
+        post :create, params: { cart: valid_attributes }
         expect(assigns(:cart)).to be(mock_cart)
       end
 
       it "redirects to the created cart" do
         allow(Cart).to receive(:new).and_return(mock_cart(save: true))
-        post :create, cart: valid_attributes
+        post :create, params: { cart: valid_attributes }
         expect(response).to redirect_to(cart_path(mock_cart))
       end
     end
@@ -71,13 +71,13 @@ RSpec.describe CartsController, type: :controller do
     describe "with invalid params" do
       it "assigns a newly created but unsaved cart as @cart" do
         allow(Cart).to receive(:new).and_return(mock_cart(save: false))
-        post :create, cart: invalid_attributes
+        post :create, params: { cart: invalid_attributes }
         expect(assigns(:cart)).to be(mock_cart)
       end
 
       it "re-renders the 'new' template" do
         allow(Cart).to receive(:new).and_return(mock_cart(save: false))
-        post :create, cart: invalid_attributes
+        post :create, params: { cart: invalid_attributes }
         expect(response).to render_template("new")
       end
     end
@@ -87,19 +87,19 @@ RSpec.describe CartsController, type: :controller do
     describe "with valid params" do
       it "updates the requested cart" do
         allow(Cart).to receive(:find).with("37").and_return(mock_cart)
-        allow(mock_cart).to receive(:update).with(valid_attributes)
-        put :update, id: "37", cart: valid_attributes
+        allow(mock_cart).to receive(:update)
+        put :update, params: { id: "37", cart: valid_attributes }
       end
 
       it "assigns the requested cart as @cart" do
         allow(Cart).to receive(:find).and_return(mock_cart(update: true))
-        put :update, id: "1", cart: valid_attributes
+        put :update, params: { id: "1", cart: valid_attributes }
         expect(assigns(:cart)).to be(mock_cart)
       end
 
       it "redirects to the cart" do
         allow(Cart).to receive(:find).and_return(mock_cart(update: true))
-        put :update, id: "1", cart: valid_attributes
+        put :update, params: { id: "1", cart: valid_attributes }
         expect(response).to redirect_to(cart_path(mock_cart))
       end
     end
@@ -107,13 +107,13 @@ RSpec.describe CartsController, type: :controller do
     describe "with invalid params" do
       it "assigns the cart as @cart" do
         allow(Cart).to receive(:find).and_return(mock_cart(update: false))
-        put :update, id: "1", cart: invalid_attributes
+        put :update, params: { id: "1", cart: invalid_attributes }
         expect(assigns(:cart)).to be(mock_cart)
       end
 
       it "re-renders the 'edit' template" do
         allow(Cart).to receive(:find).and_return(mock_cart(update: false))
-        put :update, id: "1", cart: invalid_attributes
+        put :update, params: { id: "1", cart: invalid_attributes }
         expect(response).to render_template("edit")
       end
     end
@@ -123,12 +123,12 @@ RSpec.describe CartsController, type: :controller do
     it "destroys the requested cart" do
       allow(Cart).to receive(:find).with("37").and_return(mock_cart)
       allow(mock_cart).to receive(:destroy)
-      delete :destroy, id: "37"
+      delete :destroy, params: { id: "37" }
     end
 
     it "redirects to the agency page" do
       allow(Cart).to receive(:find).and_return(mock_cart)
-      delete :destroy, id: "1"
+      delete :destroy, params: { id: "1" }
       expect(response).to redirect_to(agency_url)
     end
   end

@@ -5,7 +5,7 @@ RSpec.describe PuppiesController, type: :controller do
   render_views
 
   before(:each) do
-    PuppiesController.skip_before_filter :authorize
+    PuppiesController.skip_before_action :authorize, raise: false
   end
 
   def mock_puppy(stubs={})
@@ -45,14 +45,14 @@ RSpec.describe PuppiesController, type: :controller do
   describe "GET show" do
     it "assigns the requested puppy as @puppy" do
       allow(Puppy).to receive(:find).with("37").and_return(mock_puppy)
-      get :show, id: 37, session: valid_session
+      get :show, params: { id: 37 }, session: valid_session
       expect(assigns(:puppy)).to eq(mock_puppy)
     end
   end
 
   describe "GET new" do
     it "assigns a new puppy as @puppy" do
-      CartsController.skip_before_filter :authorize
+      CartsController.skip_before_action :authorize, raise: false
       allow(Cart).to receive(:find).and_return(mock_cart(:adoptions => [mock_adoption]))
       allow(Puppy).to receive(:new).and_return(mock_puppy)
       get :new, params: {}, session: valid_session
@@ -63,7 +63,7 @@ RSpec.describe PuppiesController, type: :controller do
   describe "GET edit" do
     it "assigns the requested puppy as @puppy" do
       allow(Puppy).to receive(:find).with("37").and_return(mock_puppy)
-      get :edit, id: 37, session: valid_session
+      get :edit, params: { id: 37 }, session: valid_session
       expect(assigns(:puppy)).to eq(mock_puppy)
     end
   end
@@ -71,28 +71,28 @@ RSpec.describe PuppiesController, type: :controller do
   describe "POST create" do
     describe "with valid params" do
       it "assigns a newly created puppy as @puppy" do
-        allow(Puppy).to receive(:new).with(valid_attributes).and_return(mock_puppy(save: true))
-        post :create, puppy: valid_attributes, session: valid_session
+        allow(Puppy).to receive(:new).and_return(mock_puppy(save: true))
+        post :create, params: { puppy: valid_attributes }, session: valid_session
         expect(assigns(:puppy)).to eq(mock_puppy)
       end
 
       it "redirects to the puppy page" do
         allow(Puppy).to receive(:new).and_return(mock_puppy(:save => true))
-        post :create, puppy: valid_attributes, session: valid_session
+        post :create, params: { puppy: valid_attributes }, session: valid_session
         expect(response).to redirect_to(puppy_url(mock_puppy))
       end
     end
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved puppy as @puppy" do
-        allow(Puppy).to receive(:new).with(invalid_attributes).and_return(mock_puppy(save: false))
-        post :create, puppy: invalid_attributes, session: valid_session
+        allow(Puppy).to receive(:new).and_return(mock_puppy(save: false))
+        post :create, params: { puppy: invalid_attributes }, session: valid_session
         expect(assigns(:puppy)).to eq(mock_puppy)
       end
 
       it "re-renders the 'new' template" do
         allow(Puppy).to receive(:new).and_return(mock_puppy(save: false))
-        post :create, puppy: invalid_attributes, session: valid_session
+        post :create, params: { puppy: invalid_attributes }, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -103,21 +103,21 @@ RSpec.describe PuppiesController, type: :controller do
 
       it "updates the requested puppy" do
         allow(Puppy).to receive(:find).with("37").and_return(mock_puppy)
-        allow(mock_puppy).to receive(:update).with(valid_attributes).and_return(true)
+        allow(mock_puppy).to receive(:update).and_return(true)
         allow(mock_puppy).to receive(:name).and_return(valid_attributes)
-        put :update, id: "37", puppy: valid_attributes, session: valid_session
+        put :update, params: { id: "37", puppy: valid_attributes }, session: valid_session
         expect(response.status).to be(302)
       end
 
       it "assigns the requested puppy as @puppy" do
         allow(Puppy).to receive(:find).and_return(mock_puppy(update: true))
-        put :update, id: "1", puppy: valid_attributes, session: valid_session
+        put :update, params: { id: "1", puppy: valid_attributes }, session: valid_session
         expect(assigns(:puppy)).to eq(mock_puppy)
       end
 
       it "redirects to the puppy" do
         allow(Puppy).to receive(:find).and_return(mock_puppy(update: true))
-        put :update, id: "1", puppy: valid_attributes, session: valid_session
+        put :update, params: { id: "1", puppy: valid_attributes }, session: valid_session
         expect(response).to redirect_to(puppy_url(mock_puppy))
       end
     end
@@ -125,13 +125,13 @@ RSpec.describe PuppiesController, type: :controller do
     describe "with invalid params" do
       it "assigns the puppy as @puppy" do
         allow(Puppy).to receive(:find).and_return(mock_puppy(update: false))
-        put :update, id: "1", puppy: invalid_attributes, session: valid_session
+        put :update, params: { id: "1", puppy: invalid_attributes }, session: valid_session
         expect(assigns(:puppy)).to be(mock_puppy)
       end
 
       it "re-renders the 'edit' template" do
         allow(Puppy).to receive(:find).and_return(mock_puppy(update: false))
-        put :update, id: "1", puppy: invalid_attributes, session: valid_session
+        put :update, params: { id: "1", puppy: invalid_attributes }, session: valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -141,12 +141,12 @@ RSpec.describe PuppiesController, type: :controller do
     it "destroys the requested puppy" do
       allow(Puppy).to receive(:find).with("37").and_return(mock_puppy)
       allow(mock_puppy).to receive(:destroy)
-      delete :destroy, id: 37, session: valid_session
+      delete :destroy, params: { id: 37 }, session: valid_session
     end
 
     it "redirects to the puppies page" do
       allow(Puppy).to receive(:find).and_return(mock_puppy)
-      delete :destroy, id: 1, session: valid_session
+      delete :destroy, params: { id: 1 }, session: valid_session
       expect(response).to redirect_to(puppies_url)
     end
   end

@@ -1,5 +1,5 @@
 class PuppiesController < ApplicationController
-  skip_before_filter :authorize, :only => [:index, :show]
+  skip_before_action :authorize, only: [:index, :show], raise: false
   before_action :set_puppy, only: [:show, :edit, :update, :destroy]
 
   def index

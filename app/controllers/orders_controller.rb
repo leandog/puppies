@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  skip_before_filter :authorize, :only => [:new, :create]
+  skip_before_action :authorize, :only => [:new, :create], raise: false
   before_action :set_order, only: [:show, :edit, :update, :destroy]
 
   def index

@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
-  skip_before_filter :authorize
-  
+  skip_before_action :authorize, raise: false
+
   def create
     if user = User.authenticate(params[:name], params[:password])
       session[:user_id] = user.id

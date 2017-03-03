@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
   before(:each) do
-    UsersController.skip_before_filter :authorize
+    UsersController.skip_before_action :authorize, raise: false
   end
 
   def mock_user(stubs={})
@@ -39,14 +39,14 @@ RSpec.describe UsersController, type: :controller do
   describe "GET show" do
     it "assigns the requested user as @user" do
       allow(User).to receive(:find).with("37").and_return(mock_user)
-      get :show, id: "37"
+      get :show, params: { id: "37" }
       expect(assigns(:user)).to be(mock_user)
     end
   end
 
   describe "GET new" do
     it "assigns a new user as @user" do
-      CartsController.skip_before_filter :authorize
+      CartsController.skip_before_action :authorize, raise: false
       allow(Cart).to receive(:find).and_return(mock_cart(adoptions: [mock_adoption]))
       allow(User).to receive(:new).and_return(mock_user)
       get :new
@@ -57,7 +57,7 @@ RSpec.describe UsersController, type: :controller do
   describe "GET edit" do
     it "assigns the requested user as @user" do
       allow(User).to receive(:find).with("37").and_return(mock_user)
-      get :edit, id: "37"
+      get :edit, params: { id: "37" }
       expect(assigns(:user)).to be(mock_user)
     end
   end
@@ -65,34 +65,34 @@ RSpec.describe UsersController, type: :controller do
   describe "POST create" do
     describe "with valid params" do
       it "assigns a newly created user as @user" do
-        allow(User).to receive(:new).with(valid_attributes).and_return(mock_user(save: true))
-        post :create, user: valid_attributes
+        allow(User).to receive(:new).and_return(mock_user(save: true))
+        post :create, params: { user: valid_attributes }
         expect(assigns(:user)).to be(mock_user)
       end
 
       it "redirects to the users page" do
         allow(User).to receive(:new).and_return(mock_user(save: true))
-        post :create, user: valid_attributes
+        post :create, params: { user: valid_attributes }
         expect(response).to redirect_to(users_path)
       end
 
       it "should display a 'successfully created' message" do
         allow(User).to receive(:new).and_return(mock_user(save: true, name: 'Kim'))
-        post :create, user: {name: "Kim"}
+        post :create, params: { user: {name: "Kim"} }
         expect(flash[:notice]).to eq('User Kim was successfully created.')
       end
     end
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved user as @user" do
-        allow(User).to receive(:new).with(invalid_attributes).and_return(mock_user(save: false))
-        post :create, user: invalid_attributes
+        allow(User).to receive(:new).and_return(mock_user(save: false))
+        post :create, params: { user: invalid_attributes }
         expect(assigns(:user)).to be(mock_user)
       end
 
       it "re-renders the 'new' template" do
         allow(User).to receive(:new).and_return(mock_user(save: false))
-        post :create, user: invalid_attributes
+        post :create, params: { user: invalid_attributes }
         expect(response).to render_template("new")
       end
     end
@@ -102,27 +102,27 @@ RSpec.describe UsersController, type: :controller do
     describe "with valid params" do
       it "updates the requested user" do
         allow(User).to receive(:find).with("37").and_return(mock_user)
-        allow(mock_user).to receive(:update).with(valid_attributes)
-        put :update, id: "37", user: valid_attributes
+        allow(mock_user).to receive(:update)
+        put :update, params: { id: "37", user: valid_attributes }
         expect(response.status).to be(200)
       end
 
       it "assigns the requested user as @user" do
         allow(User).to receive(:find).with("37").and_return(mock_user(update: true))
-        put :update, id: "37", user: {name: "Kim"}
+        put :update, params: { id: "37", user: {name: "Kim"} }
         expect(assigns(:user)).to be(mock_user)
       end
 
       it "redirects to the user" do
         allow(User).to receive(:find).and_return(mock_user(update: true))
-        put :update, id: "1", user: {name: "Kim"}
+        put :update, params: { id: "1", user: {name: "Kim"} }
         expect(response).to redirect_to(users_path)
       end
 
       it "should display a 'successfully updated' message" do
         allow(User).to receive(:find).and_return(mock_user(update: true))
         allow(mock_user).to receive(:name).and_return('Kim')
-        put :update, id: "1", user: {name: "Kim"}
+        put :update, params: { id: "1", user: {name: "Kim"} }
         expect(flash[:notice]).to eq('User Kim was successfully updated.')
       end
     end
@@ -130,13 +130,13 @@ RSpec.describe UsersController, type: :controller do
     describe "with invalid params" do
       it "assigns the user as @user" do
         allow(User).to receive(:find).and_return(mock_user(update: false))
-        put :update, id: "1", user: invalid_attributes
+        put :update, params: { id: "1", user: invalid_attributes }
         expect(assigns(:user)).to be(mock_user)
       end
 
       it "re-renders the 'edit' template" do
         allow(User).to receive(:find).and_return(mock_user(update: false))
-        put :update, id: "1", user: invalid_attributes
+        put :update, params: { id: "1", user: invalid_attributes }
         expect(response).to render_template("edit")
       end
     end
@@ -146,12 +146,12 @@ RSpec.describe UsersController, type: :controller do
     it "destroys the requested user" do
       allow(User).to receive(:find).with("37").and_return(mock_user)
       allow(mock_user).to receive(:destroy)
-      delete :destroy, id: "37"
+      delete :destroy, params: { id: "37" }
     end
 
     it "redirects to the users page" do
       allow(User).to receive(:find).and_return(mock_user)
-      delete :destroy, id: "1"
+      delete :destroy, params: { id: "1" }
       expect(response).to redirect_to(users_url)
     end
   end

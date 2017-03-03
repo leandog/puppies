@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe SessionsController, type: :controller do
   before(:each) do
-    UsersController.skip_before_filter :authorize
+    UsersController.skip_before_action :authorize, raise: false
   end
 
   def mock_user(stubs={})
@@ -14,18 +14,18 @@ RSpec.describe SessionsController, type: :controller do
     describe "when authentication successful" do
       it "should authenticate the user" do
         allow(User).to receive(:authenticate).with('name', 'pass')
-        post :create, {:name => 'name', :password => 'pass'}
+        post :create, params: {:name => 'name', :password => 'pass'}
       end
 
       it "should create a user session when authentication is successful" do
         allow(User).to receive(:authenticate).and_return(mock_user(:id => 2))
-        post :create
+        post :create, params: {:name => 'name', :password => 'pass'}
         expect(session[:user_id]).to eq(2)
       end
 
       it "should redirect to the admin page " do
         allow(User).to receive(:authenticate).and_return(mock_user)
-        post :create
+        post :create, params: {:name => 'name', :password => 'pass'}
         expect(response).to redirect_to admin_url
       end
     end
@@ -36,12 +36,12 @@ RSpec.describe SessionsController, type: :controller do
       end
 
       it "should redirect back to the login url" do
-        post :create
+        post :create, params: {:name => 'name', :password => 'pass'}
         expect(response).to redirect_to login_url
       end
 
       it "should display 'Invalid user/password combination'" do
-        post :create
+        post :create, params: {:name => 'name', :password => 'pass'}
         expect(flash[:alert]).to eq('Invalid user/password combination')
       end
 

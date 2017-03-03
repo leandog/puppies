@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.2'
 
 gem 'json_pure'
 gem 'spruz'
@@ -21,6 +21,7 @@ group :development, :test do
   gem 'rspec', '~> 3.5'
   gem 'rspec-rails'
   gem 'rspec-activemodel-mocks'
+  gem 'rails-controller-testing'
   gem 'factory_girl'
   gem 'factory_girl_rails'
   gem 'page-object'

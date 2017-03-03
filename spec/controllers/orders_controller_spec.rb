@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe OrdersController, type: :controller do
   before(:each) do
-    OrdersController.skip_before_filter :authorize
+    OrdersController.skip_before_action :authorize, raise: false
   end
 
   def mock_puppy(stubs={})
@@ -42,7 +42,7 @@ RSpec.describe OrdersController, type: :controller do
   describe "GET show" do
     it "assigns the requested order as @order" do
       allow(Order).to receive(:find).with("37").and_return(mock_order)
-      get :show, id: "37"
+      get :show, params: { id: "37" }
       expect(assigns(:order)).to be(mock_order)
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe OrdersController, type: :controller do
   describe "GET edit" do
     it "assigns the requested order as @order" do
       allow(Order).to receive(:find).with("37").and_return(mock_order)
-      get :edit, id: "37"
+      get :edit, params: { id: "37" }
       expect(assigns(:order)).to be(mock_order)
     end
   end
@@ -73,28 +73,28 @@ RSpec.describe OrdersController, type: :controller do
   describe "POST create" do
     describe "with valid params" do
       it "assigns a newly created puppy as @puppy" do
-        allow(Order).to receive(:new).with(valid_attributes).and_return(mock_order(save: true))
-        post :create, order: valid_attributes
+        allow(Order).to receive(:new).and_return(mock_order(save: true))
+        post :create, params: { order: valid_attributes }
         expect(assigns(:order)).to be(mock_order)
       end
 
       it "redirects to the agency page" do
         allow(Order).to receive(:new).and_return(mock_order(save: true))
-        post :create, order: {}
+        post :create, params: { order: {} }
         expect(response).to redirect_to(agency_url)
       end
     end
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved order as @order" do
-        allow(Order).to receive(:new).with(invalid_attributes).and_return(mock_order(save: false))
-        post :create, order: invalid_attributes
+        allow(Order).to receive(:new).and_return(mock_order(save: false))
+        post :create, params: { order: invalid_attributes }
         expect(assigns(:order)).to be(mock_order)
       end
 
       it "re-renders the 'new' template" do
         allow(Order).to receive(:new).and_return(mock_order(save: false))
-        post :create, order: invalid_attributes
+        post :create, params: { order: invalid_attributes }
         expect(response).to render_template("new")
       end
     end
@@ -104,20 +104,20 @@ RSpec.describe OrdersController, type: :controller do
     describe "with valid params" do
       it "updates the requested order" do
         allow(Order).to receive(:find).with("37").and_return(mock_order)
-        allow(mock_order).to receive(:update).with(valid_attributes)
-        put :update, id: "37", order: valid_attributes
+        allow(mock_order).to receive(:update)
+        put :update, params: { id: "37", order: valid_attributes }
         expect(response.status).to be(200)
       end
 
       it "assigns the requested order as @order" do
         allow(Order).to receive(:find).and_return(mock_order(update: true))
-        put :update, id: "1", order: valid_attributes
+        put :update, params: { id: "1", order: valid_attributes }
         expect(assigns(:order)).to be(mock_order)
       end
 
       it "redirects to the order" do
         allow(Order).to receive(:find).and_return(mock_order(update: true))
-        put :update, id: "1", order: valid_attributes
+        put :update, params: { id: "1", order: valid_attributes }
         expect(response).to redirect_to(order_url(mock_order))
       end
     end
@@ -125,13 +125,13 @@ RSpec.describe OrdersController, type: :controller do
     describe "with invalid params" do
       it "assigns the order as @order" do
         allow(Order).to receive(:find).and_return(mock_order(update: false))
-        put :update, id: "1", order: valid_attributes
+        put :update, params: { id: "1", order: valid_attributes }
         expect(assigns(:order)).to be(mock_order)
       end
 
       it "re-renders the 'edit' template" do
         allow(Order).to receive(:find).and_return(mock_order(update: false))
-        put :update, id: "1", order: valid_attributes
+        put :update, params: { id: "1", order: valid_attributes }
         expect(response).to render_template("edit")
       end
     end
@@ -141,12 +141,12 @@ RSpec.describe OrdersController, type: :controller do
     it "destroys the requested order" do
       allow(Order).to receive(:find).with("37").and_return(mock_order)
       allow(mock_order).to receive(:destroy)
-      delete :destroy, id: "37"
+      delete :destroy, params: { id: "37" }
     end
 
     it "redirects to the orders page" do
       allow(Order).to receive(:find).and_return(mock_order)
-      delete :destroy, id: "1"
+      delete :destroy, params: { id: "1" }
       expect(response).to redirect_to(orders_url)
     end
   end
