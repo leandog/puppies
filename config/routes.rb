@@ -1,4 +1,6 @@
 Puppies::Application.routes.draw do
+
+  get 'contact', to: 'contacts#new', as: 'new_message'
   get 'admin' => 'admin#index'
 
   controller :sessions do
@@ -14,6 +16,7 @@ Puppies::Application.routes.draw do
   resources :puppies
   resources :agency, only: [:index]
 
-  root "agency#index", :as => 'agency'
+  resource :contact, only: [:new, :create]
 
+  root "agency#index", :as => 'agency'
 end

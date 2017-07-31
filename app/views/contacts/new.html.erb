@@ -1,0 +1,16 @@
+<% if notice -%>
+  <p id='notice'><%= notice %></p>
+<% end %>
+
+<h1>Contact</h1>
+
+<%= form_for @message, url: contact_path do |f| %>
+  <%= @message.errors.full_messages.join(', ') %>
+
+  <%= f.text_field :name, placeholder: 'name' %>
+  <%= f.email_field :email, placeholder: 'email' %>
+  <%= f.text_area :body, placeholder: 'body' %>
+
+  <%= f.submit 'Send' %>
+<% end %>
+
