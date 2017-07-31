@@ -80,7 +80,7 @@ RSpec.describe OrdersController, type: :controller do
 
       it "redirects to the agency page" do
         allow(Order).to receive(:new).and_return(mock_order(save: true))
-        post :create, params: { order: {} }
+        post :create, params: { order: valid_attributes }
         expect(response).to redirect_to(agency_url)
       end
     end
