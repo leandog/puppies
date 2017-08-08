@@ -16,6 +16,12 @@ Puppies::Application.routes.draw do
   resources :puppies
   resources :agency, only: [:index]
 
+  resource :learning
+  resources :shelters
+  resources :classifieds
+  resources :discussions
+  resources :news
+
   resource :contact, only: [:new, :create]
 
   root "agency#index", :as => 'agency'

@@ -2,15 +2,15 @@ class ApplicationController < ActionController::Base
   before_action :authorize
   protect_from_forgery
 
-  private
+  helper_method :current_cart
 
-    def current_cart
-      Cart.find(session[:cart_id])
-    rescue ActiveRecord::RecordNotFound
-      cart = Cart.create
-      session[:cart_id] = cart.id
-      cart
-    end
+  def current_cart
+    Cart.find(session[:cart_id])
+  rescue ActiveRecord::RecordNotFound
+    cart = Cart.create
+    session[:cart_id] = cart.id
+    cart
+  end
 
   protected
 

@@ -22,7 +22,7 @@
             <div id="sidebar">
                 <div id="sb_top">
                    <div class="sb_logo">
-                      <a href="index.html" title="Home"><%= image_tag("logo.png", :alt => "Home") %></a>
+                       <a href="<%= agency_path %>" title="Home"><%= image_tag("logo.png", :alt => "Home") %></a>
                     </div>
                     <p>Home of the Happy Puppy</p>
                 </div>
@@ -31,11 +31,12 @@
 
                   <ul id="navlist">
                     <li><%= link_to "Adopt a Puppy", agency_path %></li>
-                    <li><a href="http://www...">Learn</a></li>
-                    <li><a href="http://www...">Animal Shelters</a></li>
-                    <li><a href="http://www...">Classifieds</a></li>
-                    <li><a href="http://www...">Message Boards</a></li>
-                    <li><a href="http://www...">Pet News</a></li>
+                    <li><%= link_to "My Litter", cart_path(current_cart) %></li>
+                    <li><%= link_to "Learn", learning_path %></li>
+                    <li><%= link_to "Animal Shelters", shelters_path %></li>
+                    <li><%= link_to "Classifieds", classifieds_path %></li>
+                    <li><%= link_to "Message Boards", discussions_path %></li>
+                    <li><%= link_to "Pet News", news_index_path %></li>
 
                     <% if session[:user_id] -%>
                       <li><%= link_to "Adoptions", orders_path %></li>
