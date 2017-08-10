@@ -6,6 +6,15 @@ class ContactsController < ApplicationController
   end
 
   def create
+    @message = ContactMessage.new(contact_message_params)
 
+
+  end
+
+
+  private
+
+  def contact_message_params
+    params.require(:contact_message).permit(:name, :email, :body)
   end
 end
