@@ -124,7 +124,6 @@ GEM
       watir-webdriver (>= 0.6.11, < 0.9.9)
     page_navigation (0.10)
       data_magic (>= 0.22)
-    pg (0.14.1)
     public_suffix (2.0.5)
     rack (2.0.1)
     rack-test (0.6.3)
@@ -239,7 +238,6 @@ DEPENDENCIES
   jquery-rails
   json_pure
   page-object
-  pg
   rails (= 5.0.2)
   rails-controller-testing
   rspec (~> 3.5)
@@ -253,4 +251,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.14.4
+   1.15.3
