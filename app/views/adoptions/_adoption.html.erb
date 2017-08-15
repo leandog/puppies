@@ -1,3 +1,4 @@
+<table id="puppy-<%= adoption.puppy.name.parameterize %>">
 <tr>
   <td><%= image_tag(adoption.puppy.image_url, :width => '30') %></td>
   <td><h2><%= adoption.puppy.name %>:</h2></td>
@@ -28,4 +29,5 @@
   <td><%= check_box_tag 'vet'%> First Vet Visit ($69.99)</td>
   <td><div class="vet-amount"></div></td>
 </tr>
+</table>
 
