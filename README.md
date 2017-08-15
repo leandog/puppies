@@ -1,4 +1,4 @@
-== Puppies example application
+## Puppies example application
 
 This is an example application that I am developing to use in an ATDD course as well
 as my book.
