@@ -9,7 +9,6 @@ gem 'ffi'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'will_paginate'
 gem 'jquery-rails'
 
 gem 'sass-rails'
@@ -22,6 +21,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rspec-activemodel-mocks'
   gem 'rails-controller-testing'
+  gem 'jasmine-rails'
   gem 'factory_girl'
   gem 'factory_girl_rails'
   gem 'page-object'

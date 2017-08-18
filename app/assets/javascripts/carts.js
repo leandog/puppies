@@ -3,7 +3,7 @@ var Adoption = function() {
     $('#collar').live('click', function(event) {
         Adoption.prototype.handleClickEvent(event, '.collar-amount', 19.99);
     });
-    
+
     $('#toy').live('click', function(event) {
         Adoption.prototype.handleClickEvent(event, '.toy-amount', 8.99);
     });
@@ -27,7 +27,7 @@ Adoption.prototype = {
             Adoption.prototype.decreaseCartTotal(price);
         }
     },
-    
+
     increaseCartTotal: function(amount) {
         var priceCell = $('.total_cell').children().first();
         var total = Adoption.prototype.cartTotal(priceCell);

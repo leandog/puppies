@@ -24,5 +24,7 @@ Puppies::Application.routes.draw do
 
   resource :contact, only: [:new, :create]
 
+  mount JasmineRails::Engine => "/specs" if defined?(JasmineRails)
+
   root "agency#index", :as => 'agency'
 end
