@@ -15,6 +15,8 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 
+gem 'will_paginate'
+
 group :development, :test do
   gem 'therubyracer', platforms: :ruby
   gem 'rspec', '~> 3.5'

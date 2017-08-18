@@ -9,7 +9,7 @@ RSpec.describe AgencyController, type: :controller do
 
   context "handling GET /index" do
     before(:each) do
-      allow(Puppy).to receive(:paginate).and_return(mock_puppy)
+      allow(Puppy).to receive(:order).and_return(mock_puppy)
     end
 
     def do_get
@@ -24,11 +24,6 @@ RSpec.describe AgencyController, type: :controller do
     it "should render the index template" do
       do_get
       expect(response).to render_template('index')
-    end
-
-    it "should retrieve and paginate all puppies" do
-      expect(Puppy).to receive(:paginate)
-      do_get
     end
 
     it "should assign the products for the view" do
