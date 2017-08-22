@@ -30,13 +30,13 @@
                 <div class="sb_content">
 
                   <ul id="navlist">
-                    <li><%= link_to "Adopt a Puppy", agency_path %></li>
-                    <li><%= link_to "My Litter", cart_path(current_cart) %></li>
-                    <li><%= link_to "Learn", learning_path %></li>
-                    <li><%= link_to "Animal Shelters", shelters_path %></li>
-                    <li><%= link_to "Classifieds", classifieds_path %></li>
-                    <li><%= link_to "Message Boards", discussions_path %></li>
-                    <li><%= link_to "Pet News", news_index_path %></li>
+                    <li><%= link_to "Adopt a Puppy", agency_path, name: "Adopt a Puppy".parameterize %></li>
+                    <li><%= link_to "My Litter", cart_path(current_cart), name: "My Litter".parameterize %></li>
+                    <li><%= link_to "Learn", learning_path, name: "Learn".parameterize %></li>
+                    <li><%= link_to "Animal Shelters", shelters_path, name: "Animal Shelters".parameterize %></li>
+                    <li><%= link_to "Classifieds", classifieds_path, name: "Classifieds".parameterize %></li>
+                    <li><%= link_to "Message Boards", discussions_path, name: "Message Boards".parameterize %></li>
+                    <li><%= link_to "Pet News", news_index_path, name: "Pet News".parameterize %></li>
 
                     <% if session[:user_id] -%>
                       <li><%= link_to "Adoptions", orders_path %></li>
@@ -53,7 +53,7 @@
             <!-- Top -->
             <div id="header">
                    <input name="search" class="search" type="text" value="Search..." />
-                   <a href="<%= new_contact_path %>" name="Contact"><%= image_tag("contact.jpg", :alt => "Contact") %></a>
+                   <a href="<%= new_contact_path %>" name="contact"><%= image_tag("contact.jpg", :alt => "Contact") %></a>
             </div>
 
 
