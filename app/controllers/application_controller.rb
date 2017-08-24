@@ -1,6 +1,11 @@
+require "application_responder"
+
 class ApplicationController < ActionController::Base
+  self.responder = ApplicationResponder
+  respond_to :html
+
   before_action :authorize
-  protect_from_forgery
+  protect_from_forgery with: :exception
 
   helper_method :current_cart
 
@@ -10,6 +15,12 @@ class ApplicationController < ActionController::Base
     cart = Cart.create
     session[:cart_id] = cart.id
     cart
+  end
+
+  def respond_modal_with(*args, &blk)
+    options = args.extract_options!
+    options[:responder] = ModalResponder
+    respond_with *args, options, &blk
   end
 
   protected

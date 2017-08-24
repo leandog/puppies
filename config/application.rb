@@ -11,6 +11,9 @@ end
 
 module Puppies
   class Application < Rails::Application
+    # Use the responders controller from the responders gem
+    config.app_generators.scaffold_controller :responders_controller
+
     # Version of your assets, change this if you want to expire all of
     # your assets
     config.assets.version = "1.0"

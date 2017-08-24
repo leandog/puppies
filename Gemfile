@@ -16,6 +16,9 @@ gem 'coffee-rails'
 gem 'uglifier'
 
 gem 'will_paginate'
+gem 'awesome_nested_set'
+gem 'bootstrap', '~> 4.0.0.beta'
+gem 'responders'
 
 group :development, :test do
   gem 'therubyracer', platforms: :ruby

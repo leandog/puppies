@@ -19,7 +19,7 @@ Puppies::Application.routes.draw do
   resource :learning
   resources :shelters
   resources :classifieds
-  resources :discussions
+  resources :discussion_posts
   resources :news
 
   resource :contact, only: [:new, :create]

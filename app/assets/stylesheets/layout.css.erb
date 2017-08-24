@@ -140,7 +140,7 @@
   float: left;
   clear: right;
   width: 670px;
-  height: 40px;
+  height: 55px;
   padding-top: 15px;
   color: white;
   text-align: right;
@@ -158,14 +158,16 @@
 #content {
   display: block;
   float: left;
-  width: 670px;
+  width: 669px;
   border-top: #877065 9px solid;
   text-align: left;
   margin-bottom: 50px;
+  margin-right: 10px;
 }
 
 #content ul li {
-  list-style: url(<%= asset_path 'bullet.jpg' %>);
+    /*list-style: url(<%= asset_path 'bullet.jpg' %>);*/
+    list-style: none;
 }
 
 #content img {
@@ -250,4 +252,14 @@
 #intro a:hover, #introduction a:hover {
   color: #FFFF99;
   border-bottom: 1px dotted #FFFF99;
+}
+
+.message-content {
+  padding: 4px;
+}
+
+.message-content:after {
+  clear: both;
+  content: "";
+  display: block;
 }

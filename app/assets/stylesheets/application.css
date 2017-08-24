@@ -1,9 +1,13 @@
 /*
+*= require bootstrap-base
+*= require form
+*= require puppies
+*= require scaffold
+*= require stylesheet
 *= require_self
-*= require_tree .
 */
 
-#new_contact_message input, textarea {
+#new_contact_message input, #new_contact_message textarea {
   display: block;
   margin-top: 5px;
   margin-bottom: 5px;

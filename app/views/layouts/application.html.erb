@@ -35,7 +35,7 @@
                     <li><%= link_to "Learn", learning_path, name: "Learn".parameterize %></li>
                     <li><%= link_to "Animal Shelters", shelters_path, name: "Animal Shelters".parameterize %></li>
                     <li><%= link_to "Classifieds", classifieds_path, name: "Classifieds".parameterize %></li>
-                    <li><%= link_to "Message Boards", discussions_path, name: "Message Boards".parameterize %></li>
+                    <li><%= link_to "Message Boards", discussion_posts_path, name: "Message Boards".parameterize %></li>
                     <li><%= link_to "Pet News", news_index_path, name: "Pet News".parameterize %></li>
 
                     <% if session[:user_id] -%>
@@ -69,5 +69,6 @@
         </div> <!-- /wrapper -->
         <div class="clear">&nbsp;</div> <!-- Important! Fix the problem of height in Firefox -->
     </div> <!-- /Container -->
+    <div id="modal_holder"></div>
 </body>
 </html>
