@@ -26,5 +26,9 @@ Puppies::Application.routes.draw do
 
   mount JasmineRails::Engine => "/specs" if defined?(JasmineRails)
 
+  if Rails.env.development? || Rails.env.test?
+    get 'reset_database' => 'data_fixtures#purge'
+  end
+
   root "agency#index", :as => 'agency'
 end
