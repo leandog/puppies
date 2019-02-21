@@ -1,18 +1,18 @@
 var Adoption = function() {
     jQuery.extend(this);
-    $('#collar').live('click', function(event) {
+    $('#collar').on('click', function(event) {
         Adoption.prototype.handleClickEvent(event, '.collar-amount', 19.99);
     });
 
-    $('#toy').live('click', function(event) {
+    $('#toy').on('click', function(event) {
         Adoption.prototype.handleClickEvent(event, '.toy-amount', 8.99);
     });
 
-    $('#carrier').live('click', function(event) {
+    $('#carrier').on('click', function(event) {
         Adoption.prototype.handleClickEvent(event, '.carrier-amount', 39.99);
     });
 
-    $('#vet').live('click', function(event) {
+    $('#vet').on('click', function(event) {
         Adoption.prototype.handleClickEvent(event, '.vet-amount', 69.99);
     });
 }
